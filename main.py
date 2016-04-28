@@ -3,7 +3,6 @@ import heapq
 from sys import *
 from knn import *
 from collections import defaultdict
-import thread
 from distanceWeighting import *
 
 def randomizeData(data):
@@ -312,7 +311,9 @@ def runCVwithNT(databuckets,targetIndex,prop):
         originalAccuracy = calcAccuracy(knn,validationData)
         o.append(originalAccuracy)
         #NT Growth
+        print "DataSize Before NT Growth", len(trainingData+validationData)
         trainingData = ntGrowth(trainingData+validationData,prop,[prop[0][0]])
+        print "DataSize After NT Growth", len(trainingData)
         knn2 = Knn(trainingData,[targetIndex],8,prop)
         accuracy = calcAccuracy(knn,testingData)
         a.append(accuracy)
@@ -327,14 +328,14 @@ if __name__ == '__main__':
     # propfile = "iris-prop.txt"
     # datafile = "iris-data.txt"
 
-    propfile = "heart-prop.txt"
-    datafile = "HeartDataSet.txt"
+    # propfile = "heart-prop.txt"
+    # datafile = "HeartDataSet.txt"
 
     # propfile = "tic_tac_toe_prop.txt"
     # datafile = "tic-tac-toe-data.txt"
 
-    # propfile = "credit_screening-prop.txt"
-    # datafile = "credit-screening-data.txt"
+    propfile = "credit_screening-prop.txt"
+    datafile = "credit-screening-data.txt"
 
     # propfile = "voting-prop.txt"
     # datafile = "voting-data.txt"
@@ -372,12 +373,12 @@ if __name__ == '__main__':
     targetIndex = prop[0][0]
     #10 cross validation
     runCVwithNT(databuckets,targetIndex,prop)
-    runCVwithDW(databuckets,targetIndex,prop)
-    runCVwithSBE(databuckets,targetIndex,prop)
-    features = [i for i in range(len(databuckets[0][0])) if i not in prop[0]]
-    accuracy = []
-    for k in range(1,len(features)+1):
-        accuracy.append((runCVwithDiffK(databuckets,targetIndex,prop,k),k))
-    accuracy.sort(key=lambda x: x[0])
-    print "********** SUMMARY ***********"
-    print "Max Accuracy obtained with k=",accuracy[-1][1]
+    # runCVwithDW(databuckets,targetIndex,prop)
+    # runCVwithSBE(databuckets,targetIndex,prop)
+    # features = [i for i in range(len(databuckets[0][0])) if i not in prop[0]]
+    # accuracy = []
+    # for k in range(1,len(features)+1):
+    #     accuracy.append((runCVwithDiffK(databuckets,targetIndex,prop,k),k))
+    # accuracy.sort(key=lambda x: x[0])
+    # print "********** SUMMARY ***********"
+    # print "Max Accuracy obtained with k=",accuracy[-1][1]
